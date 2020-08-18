@@ -8,17 +8,22 @@ config.timeout = 2
 
 browser.open('/commits/master')
 
-config.window_height = 1080
-config.window_width = 1920
+# config.window_height = 768
+# config.window_width = 1024
 
+# getting text from last commit
 commit = browser.element(
-    '//div[contains(@class,"js-navigation-container")]/div[1]//li[1]//a[contains(@class,"js-navigation-open")]') \
-    .text
-start = commit.index('#') + 1
-end = commit.index('-', start) - 1
-number = commit[start:end]
+    '//div[contains(@class,"js-navigation-container")]/div[1]//li[1]') \
+    .get_attribute('innerText')
+# not all commits have their numbers
+if commit.find('#') != -1:
+    start = commit.index('#') + 1
+    end = commit.index('-', start) - 1
+    # getting current number of last commit
+    number = commit[start:end]
+    commit = number
 
 browser.open('/')
-s('//div[contains(@class,"Box-header")]//span/a').should(have.text(number))
-# print result if test Passed
-print('Current commit as expected and = ' + number)
+# comparing commits
+s('//div[@class="Box mb-3"]/div[contains(@class,"Box-header")]').should(have.text(commit))
+print('Current commit as expected: ' + commit)

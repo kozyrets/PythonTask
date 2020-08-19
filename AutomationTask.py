@@ -1,9 +1,10 @@
 from selene.support.shared import config, browser
 from selene import have
 from selene.support.shared.jquery_style import s
+from ReadParam import get_param_value
 
-config.browser_name = 'chrome'
-config.base_url = 'https://github.com/django/django'
+config.browser_name = get_param_value('BROWSER')
+config.base_url = get_param_value('URL')
 config.timeout = 2
 
 browser.open('/commits/master')
